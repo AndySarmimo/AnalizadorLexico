@@ -13,22 +13,22 @@ namespace RecursividadAnalizadorLexico
             (string, string[][])[] array = new (string, string[][])[5];
             array[0] = ("E", new string[][]
             {
-                new string[] {"T","E'"}
+                new string[] {"T","D"}
             });
-            array[1] = ("E'", new string[][]
+            array[1] = ("D", new string[][]
             {
-                new string[] {"T","E'"},
-                new string[] {"-","T","E'"},
+                new string[] {"+","T","D"},
+                new string[] {"-","T","D"},
                 new string[] { ""}
             });
             array[2] = ("T", new string[][]
             {
-                new string[] {"F","T'"}
+                new string[] {"F","P"}
             });
-            array[3] = ("T'", new string[][]
+            array[3] = ("P", new string[][]
             {
-                new string[] {"*","F","T'"},
-                new string[] { "/","F","T'"},
+                new string[] {"*","F","P"},
+                new string[] { "/","F","P"},
                 new string[] { ""}
             });
             array[4] = ("F", new string[][]

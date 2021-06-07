@@ -9,9 +9,11 @@ namespace RecursividadAnalizadorLexico
         {
             Console.WriteLine("Hello World!");
             //string str = "num+id*num";
-            string[] str = new string[] { "num", "+", "id", "*", "num" };
+            string[] str = new string[] { "num", "+", "id","*","+","num"  };
             //List<(string, List<List<string>>)> lista = a.getProducciones();
-            recorrer("T'", str);
+            bool re = recorrer("E", str);
+            Console.WriteLine($"la cadena es valida?: [{re}]");
+
 
         }
 
@@ -31,6 +33,7 @@ namespace RecursividadAnalizadorLexico
         }
 
         static int k = 0;
+        static List<bool> listaValidacion = new List<bool>();
         static public bool recorrer(string from,string[] cadena ) 
         {
             List<(string, string[][])> array = Producciones.getProducciones();
@@ -40,9 +43,7 @@ namespace RecursividadAnalizadorLexico
 
             bool validado = false;
 
-            Console.WriteLine($"length : [{sublista.Length}]");
-            Console.WriteLine($"get length 0 : [{sublista.GetLength(0)}]");
-            Console.WriteLine($"get length 1 : [{sublista[0].GetLength(0)}]");
+            
             
             //Going through all de chain to analize
             //for (int k =0; k< cadena.Length; k ++)
@@ -51,53 +52,94 @@ namespace RecursividadAnalizadorLexico
             bool encontrado = false;
             bool val = true;
 
+            Console.WriteLine($" ============ DENTRO DE METODO =============");
+
+            if (k+1 == cadena.Length) 
+            {
+
+                return true;
+            
+            
+            }
+
+
             //This goes between or |, +AB|b|..
             for (int i = 0; i < sublista.Length; i++)
             {
-                    val = true;
+                Console.WriteLine($" ====FOR 1 == i :[{i}]  : [{String.Join('-',sublista[i])}]");
+                val = true;
                     //This goes inside each or ,like  "+","A","B"
-                    for (int j = 0; j < sublista[i].Length; j++)
+                for (int j = 0; j < sublista[i].Length; j++)
+                {
+
+                    Console.WriteLine($" ====FOR 2 == j:[{j}]  : [{sublista[i][j]}]");
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+
+                    //when it is lambda
+                    if (sublista[i][j] == null | sublista[i][j] == "")
                     {
-                        //when it is lambda
-                        if (sublista[i][j] == null | sublista[i][j] == "")
-                        {
-                            return val;
 
-                        }
-                        else 
+                        Console.WriteLine($"-> LAMBDA");
+                        return val;
+
+                    }
+                    else 
+                    {
+                           
+                        if (isUpper(sublista[i][j]))
                         {
-                            
-                            if (isUpper(sublista[i][j]))
+                            Console.WriteLine($"-> ES NO TERMINAL/ MAYUSCULA");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            val = val && recorrer(sublista[i][j], cadena);
+                            encontrado = val;
+                            if (!val )                            
                             {
-                                val = val & recorrer(sublista[i][j], cadena);
-
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"-> ES TERMINAL");
+                            Console.WriteLine($" valor cadena : [{cadena[k]}]");
+                            if (sublista[i][j] == cadena[k])
+                            {
+                                
+                                Console.WriteLine($"-> SON IGUALES A LA CADENA");
+                                k = k + 1;
+                                listaValidacion.Add(true);
+                                // if it is the only one
+                                if (j + 1 == sublista[i].Length)
+                                {
+                                    return true;
+                                }
+                                    
                             }
                             else
                             {
-                                if (sublista[i][j] == cadena[k])
-                                {
-                                    encontrado = true;
-                                    k = k + 1;
-                                    return encontrado;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-
+                                Console.WriteLine($"->NOO SON IGUALES A LA CADENA");
+                                break;
                             }
 
                         }
-               
-                     }
+
+                    }
+
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                }
+
+                if (encontrado)
+                {
+                    Console.WriteLine($"->encontrado es true");
+                    return encontrado;
+                }
 
 
             }
 
-
-            
-
-            return val;
+            Console.WriteLine($"->es faaalse");
+            return false;
 
                 
 
